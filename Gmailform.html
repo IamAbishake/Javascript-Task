@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #5cb85c;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        #status {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Contact Us</h2>
+        <form id="contact-form">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" required></textarea>
+
+            <button type="submit">Send</button>
+        </form>
+        <div id="status"></div>
+    </div>
+
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            emailjs.init("2iVthrTOsPYr80dTa"); // Replace with your EmailJS user ID
+
+            document.getElementById('contact-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                // Collect form data
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const message = document.getElementById('message').value;
+
+                // Prepare email parameters
+                const templateParams = {
+                    from_name: name,
+                    from_email: email,
+                    message: message
+                };
+
+                // Send email
+                emailjs.send('service_80eptzj', 'template_9nz0wqp', templateParams)
+                    .then(function(response) {
+                        console.log('SUCCESS!', response.status, response.text);
+                        document.getElementById('status').innerText = 'Message sent successfully!';
+                        document.getElementById('contact-form').reset();
+                    }, function(error) {
+                        console.log('FAILED...', error);
+                        document.getElementById('status').innerText = 'Failed to send message. Please try again later.';
+                    });
+            });
+        });
+    </script>
+</body>
+</html>
